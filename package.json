@@ -1,0 +1,27 @@
+{
+  "name": "marketplace-react",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "browserify": "browserify -t [ babelify --presets [ es2015 react ] ] src/public/javascripts/app.jsx | uglifyjs > public/javascripts/bundle.js",
+    "build": "npm run browserify",
+    "start": "npm run browserify & nodemon ./bin/bootstrap.js"
+  },
+  "dependencies": {
+    "express": "^4.13.3",
+    "express-react-views": "^0.9.0",
+    "react": "^0.14.3",
+    "react-dom": "^0.14.3"
+  },
+  "devDependencies": {
+    "babel-preset-es2015": "^6.1.18",
+    "babel-preset-react": "^6.1.18",
+    "babelify": "^7.2.0",
+    "browserify": "~6.0.3"
+  },
+  "browserify": {
+    "transform": [
+      "babelify"
+    ]
+  }
+}
