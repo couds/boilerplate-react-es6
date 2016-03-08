@@ -9,6 +9,7 @@ import reducers from 'flux/reducers'
 require("babel-polyfill")
 require('intl')
 
+
 function run() {
   let store = createStore(reducers)
 

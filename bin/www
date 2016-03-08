@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+global.assetRequire = function(){}
+
 require("babel-register");
 
 var app = require('../src/server');
