@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-global.assetRequire = function(){}
+global.assetRequire = function(){};
 
 require("babel-register");
 

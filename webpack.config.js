@@ -1,5 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
+
 
 module.exports = {
   devtool: 'cheap-module-eval-source-map',
@@ -12,14 +14,21 @@ module.exports = {
     './src/client/index.js'
   ],
   output: {
-    path: path.join(__dirname, 'public', 'javascripts'),
-    publicPath: '/static/javascripts/',
-    filename: 'bundle.js'
+    path: path.join(__dirname, 'public'),
+    publicPath: '/static/',
+    filename: 'javascripts/bundle.js',
+    chunkFilename: 'javascripts/[id].bundle.js'
   },
   plugins: [
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.NoErrorsPlugin(),
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.DefinePlugin({
+      'process.env.BROWSER': true
+    }),
+    new webpack.HotModuleReplacementPlugin(),
+    new ExtractTextPlugin("stylesheets/style.css", {
+      allChunks: true
+    })
   ],
   module: {
     loaders: [
@@ -43,18 +52,15 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        loader: 'style!css!sass?sourceMap'
+        loader: ExtractTextPlugin.extract("style-loader", "css-loader!sass-loader")
       }
     ]
   },
   resolve: {
-    modulesDirectories: ['node_modules', 'shared'],
+    modulesDirectories: ['node_modules', 'src/shared'],
     extensions: ['', '.js', '.jsx'],
     alias: {
       repositories: 'requests'
     }
-  },
-  sassLoader: {
-    includePaths: [path.resolve(__dirname, "./public/stylesheets")]
   }
 };
