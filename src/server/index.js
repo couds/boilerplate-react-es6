@@ -30,7 +30,7 @@ app.set('views', path.join('views'));
 app.set('view engine', 'react');
 
 // uncomment after placing your favicon in /public
-app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(morgan('dev'));
 app.use(compress());
 app.use(bodyParser.json());
@@ -72,25 +72,29 @@ app.use((req, res, next) => {
       } else if (redirectLocation) {
         return res.redirect(302, redirectLocation.pathname + redirectLocation.search);
       } else if (renderProps) {
-        let HTML = '';
-        RouterContext.getWrappedComponent().fetchData(req.store.dispatch,renderProps.params, location.query ).then( actions => {
+          let HTML = '';
+          const promises = renderProps.components.map( component => (
+            component.fetchData ?
+              component.fetchData(req.store.dispatch,renderProps.params, location.query) :
+              null
+          ) );
 
-
-
-        });
-        try {
-          HTML = renderToString(
-            <Provider store={req.store}>
-              <RouterContext {...renderProps} />
-            </Provider>
-          );
-          HTML = renderToStaticMarkup(<Layout store={req.store}>{HTML}</Layout>);
-        } catch (err) {
-          err.status = 500;
-          return next(err);
-        }
-        return res.status(200).send(
-          `<!DOCTYPE html> ${HTML}`);
+          Promise.all(promises)
+            .then( actions => {
+              try {
+                HTML = renderToString(
+                  <Provider store={req.store}>
+                    <RouterContext {...renderProps} />
+                  </Provider>
+                );
+                HTML = renderToStaticMarkup(<Layout store={req.store}>{HTML}</Layout>);
+              } catch (err) {
+                err.status = 500;
+                return next(err);
+              }
+              return res.status(200).send(
+                `<!DOCTYPE html> ${HTML}`);
+          });
       }
       const err = new Error('no page found');
       err.status = 404;
@@ -105,7 +109,7 @@ app.use((req, res, next) => {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-  app.use((err, req, res) => {
+  app.use((err, req, res, next) => {
     res.status(err.status || 500);
     console.log(err.message, err.stack);
     res.json(err);
@@ -116,9 +120,12 @@ if (app.get('env') === 'development') {
 // no stacktrace leaked to user
 app.use((err, req, res, next) => {
   res.status(err.status || 500);
-  res.status(err.status || 500);
   console.log(err.message, err.stack);
-  res.json(err);
+  res.json({
+    lala: '',
+    error : err.message,
+    stack : err.stack
+  });
   return next;
 });
 
