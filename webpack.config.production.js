@@ -6,7 +6,7 @@ module.exports = {
     './src/client/index.js'
   ],
   output: {
-    path: path.join(__dirname, 'public','javascripts'),
+    path: path.join(__dirname, 'public', 'javascripts'),
     publicPath: '/static/javascripts/',
     filename: 'bundle.js'
   },
@@ -25,7 +25,7 @@ module.exports = {
         query: {
           cacheDirectory: true,
           presets: ['es2015', 'react'],
-          plugins: ["syntax-object-rest-spread","transform-object-assign"]
+          plugins: ['syntax-object-rest-spread', 'transform-object-assign']
         }
       },
       {

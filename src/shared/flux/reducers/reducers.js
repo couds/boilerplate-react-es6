@@ -1,3 +1,8 @@
 export default function (state = {}, action = {}) {
-  return state
+  switch (action.type) {
+    case '':
+      return state;
+    default:
+      return state;
+  }
 }

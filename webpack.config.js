@@ -1,6 +1,6 @@
 var path = require('path');
 var webpack = require('webpack');
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 
 module.exports = {
@@ -26,7 +26,7 @@ module.exports = {
       'process.env.BROWSER': true
     }),
     new webpack.HotModuleReplacementPlugin(),
-    new ExtractTextPlugin("stylesheets/style.css", {
+    new ExtractTextPlugin('stylesheets/style.css', {
       allChunks: true
     })
   ],
@@ -39,7 +39,7 @@ module.exports = {
         query: {
           cacheDirectory: true,
           presets: ['es2015', 'react'],
-          plugins: ["syntax-object-rest-spread", "transform-object-assign"]
+          plugins: ['syntax-object-rest-spread', 'transform-object-assign']
         }
       },
       {
@@ -52,7 +52,7 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        loader: ExtractTextPlugin.extract("style-loader", "css-loader!sass-loader")
+        loader: ExtractTextPlugin.extract('style-loader', 'css-loader!sass-loader')
       }
     ]
   },

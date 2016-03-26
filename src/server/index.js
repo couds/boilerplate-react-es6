@@ -1,5 +1,5 @@
 import path from 'path';
-import favicon from 'serve-favicon';
+// import favicon from 'serve-favicon';
 //  Framework
 import express from 'express';
 import compress from 'compression';
@@ -30,7 +30,7 @@ app.set('views', path.join('views'));
 app.set('view engine', 'react');
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(morgan('dev'));
 app.use(compress());
 app.use(bodyParser.json());
@@ -72,15 +72,16 @@ app.use((req, res, next) => {
       } else if (redirectLocation) {
         return res.redirect(302, redirectLocation.pathname + redirectLocation.search);
       } else if (renderProps) {
-          let HTML = '';
-          const promises = renderProps.components.map( component => (
+        let HTML = '';
+        const promises = renderProps.components.map(component => (
             component.fetchData ?
-              component.fetchData(req.store.dispatch,renderProps.params, location.query) :
+              component.fetchData(req.store.dispatch, renderProps.params, location.query) :
               null
-          ) );
+          ));
 
-          Promise.all(promises)
-            .then( actions => {
+        Promise.all(promises)
+            .then(actions => {
+              actions.map(req.store.dispatch);
               try {
                 HTML = renderToString(
                   <Provider store={req.store}>
@@ -94,7 +95,7 @@ app.use((req, res, next) => {
               }
               return res.status(200).send(
                 `<!DOCTYPE html> ${HTML}`);
-          });
+            });
       }
       const err = new Error('no page found');
       err.status = 404;
@@ -113,6 +114,7 @@ if (app.get('env') === 'development') {
     res.status(err.status || 500);
     console.log(err.message, err.stack);
     res.json(err);
+    next();
   });
 }
 
@@ -123,8 +125,8 @@ app.use((err, req, res, next) => {
   console.log(err.message, err.stack);
   res.json({
     lala: '',
-    error : err.message,
-    stack : err.stack
+    error: err.message,
+    stack: err.stack,
   });
   return next;
 });
