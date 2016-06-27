@@ -5,10 +5,12 @@
   "main": "bin/www",
   "scripts": {
     "start": "nodemon .",
+    "webpack": "NODE_PATH=NODE_PATH:./src/shared:./src/server webpack-dev-server --no-info --config webpack.config.js",
     "build": "NODE_ENV=production NODE_PATH=NODE_PATH:./src/shared:./src/server webpack --config webpack.config.production.js --progress --profile --color -p",
     "lint": "NODE_PATH=NODE_PATH:./src/shared:./src/server  eslint src",
     "debug": "NODE_PATH=NODE_PATH:./src/shared:./src/server node-debug bin/www",
-    "build-node": "babel -s inline -D src/ -d dist"
+    "build-node": "babel -s inline -D src/ -d dist",
+    "server:start": "NODE_ENV=production NODE_PATH=NODE_PATH:./dist/shared:./dist/server node dist/server"
   },
   "dependencies": {
     "babel-register": "^6.6.5",

@@ -1,20 +1,31 @@
 var path = require('path');
 var webpack = require('webpack');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
+
 
 module.exports = {
   entry: [
-    './src/client/index.js'
+    './src/client/index.js',
   ],
   output: {
-    path: path.join(__dirname, 'public','javascripts'),
-    publicPath: '/static/javascripts/',
-    filename: 'bundle.js'
+    path: path.join(__dirname, 'public'),
+    publicPath: '/static/',
+    filename: 'javascripts/bundle.js',
+    chunkFilename: 'javascripts/[id].bundle.js',
   },
   plugins: [
     new webpack.optimize.OccurenceOrderPlugin(true),
     new webpack.NoErrorsPlugin(),
     new webpack.optimize.UglifyJsPlugin(),
-    new webpack.optimize.DedupePlugin()
+    new webpack.optimize.DedupePlugin(),
+    new webpack.optimize.MinChunkSizePlugin({minChunkSize: 100000}),
+    new webpack.DefinePlugin({
+      'process.env.BROWSER': true,
+      'NODE_ENV': 'production',
+    }),
+    new ExtractTextPlugin('stylesheets/style.css', {
+      allChunks: true,
+    }),
   ],
   module: {
     loaders: [
@@ -25,24 +36,27 @@ module.exports = {
         query: {
           cacheDirectory: true,
           presets: ['es2015', 'react'],
-          plugins: ["syntax-object-rest-spread","transform-object-assign"]
-        }
+        },
       },
       {
         test: /\.css$/, // Only .css files
-        loader: 'style!css' // Run both loaders
+        loader: 'style!css', // Run both loaders
       },
       {
-        test: /\.json/, // Only .css files
+        test: /\.json/, // Only .json files
         loader: 'json' // Run both loaders
+      },
+      {
+        test: /\.scss$/,
+        loader: ExtractTextPlugin.extract("style-loader", "css-loader!sass-loader")
       }
     ]
   },
   resolve: {
-    modulesDirectories: ['node_modules', 'shared'],
-    extensions:         ['', '.js', '.jsx'],
+    modulesDirectories: ['node_modules', 'src/shared'],
+    extensions: ['', '.js', '.jsx'],
     alias: {
-      repositories : 'requests'
-    }
-  }
+      repositories: 'requests',
+    },
+  },
 };

@@ -10,23 +10,23 @@ module.exports = {
     'webpack/hot/dev-server',
 
     // The script refreshing the browser on none hot updates
-    'webpack-dev-server/client?http://localhost:8080',
-    './src/client/index.js'
+    'webpack-dev-server/client?http://localhost:8081',
+    './src/client/index.js',
   ],
   output: {
     path: path.join(__dirname, 'public'),
     publicPath: '/static/',
     filename: 'javascripts/bundle.js',
-    chunkFilename: 'javascripts/[id].bundle.js'
+    chunkFilename: 'javascripts/[id].bundle.js',
   },
   plugins: [
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.NoErrorsPlugin(),
     new webpack.DefinePlugin({
-      'process.env.BROWSER': true
+      'process.env.BROWSER': true,
     }),
     new webpack.HotModuleReplacementPlugin(),
-    new ExtractTextPlugin("stylesheets/style.css", {
+    new ExtractTextPlugin('stylesheets/style.css', {
       allChunks: true
     })
   ],

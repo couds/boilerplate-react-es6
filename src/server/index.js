@@ -62,11 +62,11 @@ if (process.env.NODE_ENV !== 'production' || process.env.WEBPACK_DEV) {
   const proxy = httpProxy.createProxyServer();
   app.use('/static', (req, res) => {
     proxy.web(req, res, {
-      target: 'http://localhost:8081/static',
+      target: 'http://localhost:8080/static',
     });
   });
 } else {
-  app.use('/static', express.static('public'));
+  app.use('/static', express.static('./../public'));
 }
 
 app.use(helmet.noCache({ noEtag: true }));
