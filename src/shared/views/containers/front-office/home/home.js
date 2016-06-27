@@ -14,19 +14,11 @@ class Home extends Component {
       name: 'World',
     };
   }
-  static fetchData(dispatch, params = {}, query = {}) {
-    return new Promise((resolve, reject) => {
-      try {
-        resolve();
-      } catch(e) {
-        reject(e);
-      }
-    });
+  static fetchData(params = {}, query = {}) {
+    return [Promise.resolve({type:'lala'})]
   }
   componentDidMount() {
-    if (true) {
-      Home.fetchData(this.props.dispatch, this.props.params, this.props.location.query);
-    }
+    Home.fetchData(this.props.params, this.props.location.query);
   }
   render() {
     return (

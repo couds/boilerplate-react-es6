@@ -32,7 +32,7 @@ module.exports = function bundlerExport() {
 
     // The rest is terminal configurations
     quiet: false,
-    noInfo: false,
+    noInfo: true,
     stats: {
       colors: true,
     },
@@ -40,7 +40,7 @@ module.exports = function bundlerExport() {
 
   // We fire up the development server and give notice in the terminal
   // that we are starting the initial bundle
-  bundler.listen(8080, 'localhost', () => {
+  bundler.listen(8081, 'localhost', () => {
     console.log('Bundling project, please wait...');
   });
 };

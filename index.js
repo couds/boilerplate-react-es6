@@ -5,4 +5,4 @@ require('babel-register')({
   sourceMaps: true
 });
 
-require('../src/server');
+require('./src/server');

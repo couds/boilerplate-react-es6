@@ -9,7 +9,7 @@ if (process.env.BROWSER) {
 
 
 class Home extends Component {
-  
+
   constructor(props) {
     super(props);
     this.state = {
@@ -17,14 +17,14 @@ class Home extends Component {
     }
   }
 
-  static fetchData(dispatch, params = {}, query = {}) {
-    console.log(dispatch, params)
+  static fetchData(params = {}, query = {}) {
+    return [Promise.resolve({type:'TEST'})];
   }
 
   componentDidMount() {
-    Home.fetchData(this.props.dispatch, this.props.params, this.props.location.query)
+    Home.fetchData(this.props.params, this.props.location.query)
   }
-  
+
   render() {
     return (
       <div className="test2" onClick={() => this.setState({name : 'John'})}>
