@@ -1,9 +1,13 @@
-FROM nodesource/node:5.9.0
+FROM node:6.2
 
-ENV NODE_ENV development
+ENV NODE_ENV production
+ENV PORT 80
+WORKDIR /code
+
 ADD package.json package.json
-RUN npm i -d
+RUN npm i --only=dev
+RUN npm i --only=prod
 ADD . .
-
-CMD ["npm","start"]
-EXPOSE 3000
+RUN npm run build
+CMD ["npm","run", "server:start"]
+EXPOSE 80

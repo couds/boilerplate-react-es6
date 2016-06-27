@@ -1,6 +1,6 @@
 var path = require('path');
 var webpack = require('webpack');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 
 module.exports = {
@@ -10,20 +10,20 @@ module.exports = {
     'webpack/hot/dev-server',
 
     // The script refreshing the browser on none hot updates
-    'webpack-dev-server/client?http://localhost:8080',
-    './src/client/index.js'
+    'webpack-dev-server/client?http://localhost:8081',
+    './src/client/index.js',
   ],
   output: {
     path: path.join(__dirname, 'public'),
     publicPath: '/static/',
     filename: 'javascripts/bundle.js',
-    chunkFilename: 'javascripts/[id].bundle.js'
+    chunkFilename: 'javascripts/[id].bundle.js',
   },
   plugins: [
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.NoErrorsPlugin(),
     new webpack.DefinePlugin({
-      'process.env.BROWSER': true
+      'process.env.BROWSER': true,
     }),
     new webpack.HotModuleReplacementPlugin(),
     new ExtractTextPlugin('stylesheets/style.css', {
@@ -38,8 +38,7 @@ module.exports = {
         exclude: /node_modules/,
         query: {
           cacheDirectory: true,
-          presets: ['es2015', 'react'],
-          plugins: ['syntax-object-rest-spread', 'transform-object-assign']
+          presets: ['es2015', 'react']
         }
       },
       {
@@ -52,7 +51,7 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        loader: ExtractTextPlugin.extract('style-loader', 'css-loader!sass-loader')
+        loader: ExtractTextPlugin.extract("style-loader", "css-loader!sass-loader")
       }
     ]
   },

@@ -14,7 +14,7 @@
   "env": {
     "NODE_ENV": "development",
     "NODE_PATH": "./lib:./src/shared:./src/server",
-    "PORT" : 3000,
+    "PORT" : 3001,
     "WEBPACK_DEV": true
   },
   "ext": "js jsx"

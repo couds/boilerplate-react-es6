@@ -37,24 +37,42 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+function normalizePort(val) {
+  const port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+const port = normalizePort(process.env.PORT || '3001');
+
+
 /** @namespace process.env.WEBPACK_DEV */
 if (process.env.NODE_ENV !== 'production' || process.env.WEBPACK_DEV) {
+  console.log('Serve dev or webpack');
   const httpProxy = require('http-proxy');
   const proxy = httpProxy.createProxyServer();
-  // We require the bundler inside the if block because
-  // it is only needed in a development environment. Later
-  // you will see why this is a good idea
-  const bundle = require('./bundler.js');
-  bundle();
-  // Any requests to localhost:3000/build is proxy
-  // to webpack-dev-server
   app.use('/static', (req, res) => {
     proxy.web(req, res, {
       target: 'http://localhost:8080/static',
     });
   });
 } else {
-  app.use('/static', express.static('public'));
+  console.log('Serve production', path.resolve(
+    path.join(__dirname, '..', 'public/')
+  ));
+  app.use('/static', express.static(path.resolve(
+    path.join(__dirname, '..', 'public/')
+  )));
 }
 
 app.use(helmet.noCache({ noEtag: true }));
@@ -73,29 +91,30 @@ app.use((req, res, next) => {
         return res.redirect(302, redirectLocation.pathname + redirectLocation.search);
       } else if (renderProps) {
         let HTML = '';
-        const promises = renderProps.components.map(component => (
-            component.fetchData ?
-              component.fetchData(req.store.dispatch, renderProps.params, location.query) :
-              null
-          ));
+        const promises = renderProps.components.reduce((promises, component) => (
+          promises.concat(component.fetchData ?
+            component.fetchData(renderProps.params, location.query) :
+            [])
+        ), []);
 
         Promise.all(promises)
-            .then(actions => {
-              actions.map(req.store.dispatch);
-              try {
-                HTML = renderToString(
-                  <Provider store={req.store}>
-                    <RouterContext {...renderProps} />
-                  </Provider>
-                );
-                HTML = renderToStaticMarkup(<Layout store={req.store}>{HTML}</Layout>);
-              } catch (err) {
-                err.status = 500;
-                return next(err);
-              }
-              return res.status(200).send(
-                `<!DOCTYPE html> ${HTML}`);
-            });
+          .then(actions => {
+            actions.map(req.store.dispatch);
+            try {
+              HTML = renderToString(
+                <Provider store={req.store}>
+                  <RouterContext {...renderProps} />
+                </Provider>
+              );
+              HTML = renderToStaticMarkup(<Layout store={req.store}>{HTML}</Layout>);
+            } catch (err) {
+              err.status = 500;
+              return next(err);
+            }
+            return res.status(200).send(
+              `<!DOCTYPE html> ${HTML}`);
+          });
+        return null;
       }
       const err = new Error('no page found');
       err.status = 404;
@@ -114,7 +133,6 @@ if (app.get('env') === 'development') {
     res.status(err.status || 500);
     console.log(err.message, err.stack);
     res.json(err);
-    next();
   });
 }
 
@@ -124,15 +142,85 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500);
   console.log(err.message, err.stack);
   res.json({
-    lala: '',
+    lala: 'production',
     error: err.message,
     stack: err.stack,
   });
   return next;
 });
 
-module.exports = app;
-
 app.use('*', (req, res) => {
   res.render();
 });
+
+// Start Web Server
+
+const debug = require('debug')('React-Sandbox:server');
+const http = require('http');
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+const server = http.createServer(app);
+
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  const bind = typeof port === 'string'
+    ? `Pipe ${port}`
+    : `Pipe ${port}`;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(`${bind} requires elevated privileges`);
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(`${bind} is already in use`);
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  const addr = server.address();
+  const bind = typeof addr === 'string'
+    ? `pipe ${addr}`
+    : `port ${addr.port}`;
+
+  console.log(`Listening on ${bind}`);
+}
+
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+/**
+ * Normalize a port into a number, string, or false.
+ */

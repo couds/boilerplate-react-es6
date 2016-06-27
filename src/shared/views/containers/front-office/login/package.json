@@ -1,5 +1,5 @@
 {
   "name": "application-name",
   "version": "0.0.1",
-  "main":"login.jsx"
+  "main":"login.js"
 }
