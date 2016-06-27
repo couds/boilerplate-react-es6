@@ -23,6 +23,9 @@ module.exports = {
     "react/jsx-closing-bracket-location": [1, "after-props"],
     "react/prop-types": 0,
     "no-unused-vars": 0,
-    "no-shadow": 0
+    "no-shadow": 0,
+    "import/no-unresolved": 0,
+    "global-require": 0,
+    "react/jsx-first-prop-new-line": 0
   }
 };

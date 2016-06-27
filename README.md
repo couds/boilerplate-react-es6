@@ -1,2 +1,15 @@
 # boilerplate-react-es6
-Minimum boiler plate for React with ES6 (Babel) with server and client render
+
+Yet another boilerplace for isomorphic app using React/Redux 
+
+## Start webpack en dev mode
+`npm run webpack`
+
+## Start Node on dev mode using nodemon
+`npm start`
+
+## Build App for deployment
+`npm run build`
+
+## Start application after build
+`npm run server:start`

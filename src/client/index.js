@@ -19,7 +19,7 @@ function run() {
   match(({ routes, location }), () => {
     render(
       <Provider store={store} >
-        <Router children={routes} history={ browserHistory } />
+        <Router children={routes} history={browserHistory} />
       </Provider>,
       document.getElementById('react-app')
     );

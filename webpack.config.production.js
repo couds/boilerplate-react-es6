@@ -4,11 +4,12 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 
 module.exports = {
+  devtool: 'cheap-module-eval-source-map',
   entry: [
     './src/client/index.js',
   ],
   output: {
-    path: path.join(__dirname, 'public'),
+    path: path.join(__dirname, 'dist/public'),
     publicPath: '/static/',
     filename: 'javascripts/bundle.js',
     chunkFilename: 'javascripts/[id].bundle.js',
@@ -20,8 +21,10 @@ module.exports = {
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.MinChunkSizePlugin({minChunkSize: 100000}),
     new webpack.DefinePlugin({
-      'process.env.BROWSER': true,
-      'NODE_ENV': 'production',
+      'process.env': {
+        'NODE_ENV': JSON.stringify('production'),
+        'BROWSER' : true,
+      },
     }),
     new ExtractTextPlugin('stylesheets/style.css', {
       allChunks: true,
