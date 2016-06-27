@@ -8,21 +8,21 @@ if (process.env.BROWSER) {
 }
 
 class Home extends Component {
+  static fetchData(params = {}, query = {}) {
+    return [Promise.resolve({ type: 'lala' })];
+  }
   constructor(props) {
     super(props);
     this.state = {
       name: 'World',
     };
   }
-  static fetchData(params = {}, query = {}) {
-    return [Promise.resolve({type:'lala'})]
-  }
   componentDidMount() {
     Home.fetchData(this.props.params, this.props.location.query);
   }
   render() {
     return (
-      <div className="test" onClick={() => this.setState({name : 'John'})} >
+      <div className="test" onClick={() => this.setState({ name: 'John' })} >
         Hello {this.state.name}!!
         <Link to="/login" >Login</Link>
       </div>

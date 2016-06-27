@@ -38,8 +38,7 @@ module.exports = {
         exclude: /node_modules/,
         query: {
           cacheDirectory: true,
-          presets: ['es2015', 'react'],
-          plugins: ["syntax-object-rest-spread", "transform-object-assign"]
+          presets: ['es2015', 'react']
         }
       },
       {
