@@ -19,9 +19,8 @@ import routes from 'routes';
 
 //  REDUX
 
-import { createStore } from 'redux';
+import { createStore } from 'flux';
 import { Provider } from 'react-redux';
-import reducers from 'flux/reducers';
 
 const app = express();
 
@@ -80,7 +79,7 @@ app.use(helmet());
 
 app.use((req, res, next) => {
   const location = req.url;
-  req.store = createStore(reducers, { initial: true });
+  req.store = createStore();
   res.render = () => {
     const Layout = require('views/layouts/main').default;
     match({ routes, location }, (error, redirectLocation, renderProps) => {
