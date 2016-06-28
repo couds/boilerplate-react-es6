@@ -57,7 +57,6 @@ const port = normalizePort(process.env.PORT || '3001');
 
 /** @namespace process.env.WEBPACK_DEV */
 if (process.env.NODE_ENV !== 'production' || process.env.WEBPACK_DEV) {
-  console.log('Serve dev or webpack');
   const httpProxy = require('http-proxy');
   const proxy = httpProxy.createProxyServer();
   app.use('/static', (req, res) => {
@@ -66,9 +65,6 @@ if (process.env.NODE_ENV !== 'production' || process.env.WEBPACK_DEV) {
     });
   });
 } else {
-  console.log('Serve production', path.resolve(
-    path.join(__dirname, '..', 'public/')
-  ));
   app.use('/static', express.static(path.resolve(
     path.join(__dirname, '..', 'public/')
   )));

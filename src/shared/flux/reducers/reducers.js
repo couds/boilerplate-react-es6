@@ -1,5 +1,7 @@
 import { Map, List } from 'immutable';
 import { LOADING } from 'flux/middlewares/async';
+import ACTION_TYPES from 'flux/actions/types';
+
 const INITIAL_STATE = Map({
   locale: Map({
     language: 'en',
@@ -24,14 +26,13 @@ export default function (state = INITIAL_STATE, action = {}) {
             return actions.filter(a => a !== action.action);
           })
           .update(loading => {
-            console.log(loading.get('actions').size);
             return Map({
               isLoading: loading.get('actions').size > 0,
               actions: loading.get('actions'),
             });
           })
       );
-    case 'TEST':
+    case ACTION_TYPES.ACTION_TYPE:
       console.log('test reducer', action.payload);
       return state;
     default:

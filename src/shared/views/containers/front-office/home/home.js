@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { actionCreator } from 'flux/actions/creators';
 
-import { Link } from 'react-router';
 
 if (process.env.BROWSER) {
   require('./home.scss');
 }
-
-let aux = 1;
 
 class Home extends Component {
   static fetchData(params = {}, query = {}) {
@@ -32,21 +30,7 @@ class Home extends Component {
   }
 
   onClick = evt => {
-    const x = aux;
-    aux = 0;
-    this.props.dispatch({
-      type: 'TEST',
-      payload: () => new Promise((resolve) => {
-        console.log('Start payload promise');
-        setTimeout(() => {
-          if (x) {
-            console.log('CORRECT EVENT RESOLVE PAYLOAD');
-          }
-          console.log('Finish promise Test Results');
-          resolve('TEST Result');
-        }, 3000);
-      }),
-    }).then(t => {
+    this.props.dispatch(actionCreator()).then(t => {
       console.log('after dispatch', t);
     });
   }
