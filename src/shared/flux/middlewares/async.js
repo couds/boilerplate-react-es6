@@ -1,12 +1,12 @@
 export const LOADING = '@async/Loading';
 
-export default (store) => dispatch => (action = {
+export default (store) => next => (action = {
   type: '',
   ignoreLoading: false,
   payload: false,
 }) => {
   if (!action.payload) {
-    return action;
+    return next(action);
   }
   const loading = store.getState().loading || (store.getState().get && store.getState().get('loading').toJS());
 
@@ -29,7 +29,7 @@ export default (store) => dispatch => (action = {
         return;
       }
       showLoader = new Date().getTime();
-      dispatch({
+      next({
         type: LOADING,
         payload: true,
         action: action.type,
@@ -38,11 +38,11 @@ export default (store) => dispatch => (action = {
     return new Promise((resolve, reject) => {
       payload.then(data => {
         finished = true;
-        dispatch(Object.assign({}, action, { payload: data }));
+        next(Object.assign({}, action, { payload: data }));
         if (showLoader) {
           const time = new Date().getTime() - showLoader;
           setTimeout(() => {
-            dispatch({
+            next({
               type: LOADING,
               payload: false,
               action: action.type,
@@ -56,5 +56,5 @@ export default (store) => dispatch => (action = {
       });
     });
   }
-  return action;
+  return next(action);
 };

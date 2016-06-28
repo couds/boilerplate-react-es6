@@ -8,7 +8,7 @@ export default [
     path: '/',
     getComponent: (location, cb) => {
       require.ensure([], (require) => {
-        cb(null, require('views/containers/front-office/home').default);
+        cb(null, require('views/components/front-office/home').default);
       });
     },
   },
@@ -16,7 +16,7 @@ export default [
     path: '/login',
     getComponent: (location, cb) => {
       require.ensure([], (require) => {
-        cb(null, require('views/containers/front-office/login').default);
+        cb(null, require('views/components/front-office/login').default);
       });
     },
   },

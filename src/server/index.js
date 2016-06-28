@@ -86,15 +86,16 @@ app.use((req, res, next) => {
         return res.redirect(302, redirectLocation.pathname + redirectLocation.search);
       } else if (renderProps) {
         let HTML = '';
-        const promises = renderProps.components.reduce((promises, component) => (
+        const actions = renderProps.components.reduce((promises, component) => (
           promises.concat(component.fetchData ?
             component.fetchData(renderProps.params, location.query) :
             [])
         ), []);
 
-        Promise.all(promises)
-          .then(actions => {
-            actions.map(req.store.dispatch);
+
+        Promise.all(actions.map(req.store.dispatch))
+          .then(() => {
+            console.log('start render', req.store.getState());
             try {
               HTML = renderToString(
                 <Provider store={req.store}>

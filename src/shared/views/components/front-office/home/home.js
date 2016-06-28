@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { actionCreator } from 'flux/actions/creators';
+import { actionCreator, actionCreator2 } from 'flux/actions/creators';
 
 
 if (process.env.BROWSER) {
@@ -9,7 +9,7 @@ if (process.env.BROWSER) {
 
 class Home extends Component {
   static fetchData(params = {}, query = {}) {
-    return [Promise.resolve({ type: 'lala' })];
+    return [actionCreator(), actionCreator2()];
   }
   constructor(props) {
     super(props);
