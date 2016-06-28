@@ -9,19 +9,17 @@ export default (store) => dispatch => (action = {
     return action;
   }
   const loading = store.getState().loading || (store.getState().get && store.getState().get('loading').toJS());
-  if (loading && loading.actions) {
-    if (loading.actions.find(a => a === action.type)) {
-      console.log(action.payload.cancel);
-      return Promise.resolve();
-    }
-  }
+
+  // Check if the action is already loading
+  if (loading && loading.actions && loading.actions.find(a => a === action.type)) return Promise.resolve();
+
   let promise = undefined;
   let payload = action.payload;
   if (typeof action.payload === 'function') {
     payload = action.payload();
   }
   if ((payload.then && typeof(payload.then) === 'function')) {
-    promise = action.payload;
+    promise = payload;
   }
   if (promise) {
     let showLoader = false;
