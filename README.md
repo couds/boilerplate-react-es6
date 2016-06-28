@@ -13,3 +13,6 @@ Yet another boilerplace for isomorphic app using React/Redux
 
 ## Start application after build
 `npm run server:start`
+
+## Dockerize the App, (this app is exposed on port 80)
+`$ docker build --tag [your image name] .`

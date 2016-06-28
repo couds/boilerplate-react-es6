@@ -1,0 +1,7 @@
+const ACTIONS = {
+  INITIAL: 'INITIALIZATION',
+  INITIAL2: 'INITIALIZATION2',
+};
+
+export default ACTIONS;
+

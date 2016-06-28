@@ -1,21 +1,21 @@
 import React from 'react';
 import { render } from 'react-dom';
 
-import { createStore } from 'redux';
+import { createStore } from 'flux';
 import { Provider } from 'react-redux';
-import reducers from 'flux/reducers';
 
 import { Router, browserHistory, match } from 'react-router';
 import routes from 'routes';
 
-require('babel-polyfill');
+// Polyfill Intl for Safari Browser (maybe check and import only on safari?)
 require('intl');
 
 function run() {
   const element = document.getElementById('initial-state');
   const initialState = JSON.parse(element.innerHTML);
   element.remove();
-  const store = createStore(reducers, initialState);
+  const store = createStore(initialState);
+  window.test = () => store.getState();
   match(({ routes, location }), () => {
     render(
       <Provider store={store} >

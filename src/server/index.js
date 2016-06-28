@@ -19,9 +19,8 @@ import routes from 'routes';
 
 //  REDUX
 
-import { createStore } from 'redux';
+import { createStore } from 'flux';
 import { Provider } from 'react-redux';
-import reducers from 'flux/reducers';
 
 const app = express();
 
@@ -58,7 +57,6 @@ const port = normalizePort(process.env.PORT || '3001');
 
 /** @namespace process.env.WEBPACK_DEV */
 if (process.env.NODE_ENV !== 'production' || process.env.WEBPACK_DEV) {
-  console.log('Serve dev or webpack');
   const httpProxy = require('http-proxy');
   const proxy = httpProxy.createProxyServer();
   app.use('/static', (req, res) => {
@@ -67,9 +65,6 @@ if (process.env.NODE_ENV !== 'production' || process.env.WEBPACK_DEV) {
     });
   });
 } else {
-  console.log('Serve production', path.resolve(
-    path.join(__dirname, '..', 'public/')
-  ));
   app.use('/static', express.static(path.resolve(
     path.join(__dirname, '..', 'public/')
   )));
@@ -80,7 +75,7 @@ app.use(helmet());
 
 app.use((req, res, next) => {
   const location = req.url;
-  req.store = createStore(reducers, { initial: true });
+  req.store = createStore();
   res.render = () => {
     const Layout = require('views/layouts/main').default;
     match({ routes, location }, (error, redirectLocation, renderProps) => {
@@ -91,15 +86,16 @@ app.use((req, res, next) => {
         return res.redirect(302, redirectLocation.pathname + redirectLocation.search);
       } else if (renderProps) {
         let HTML = '';
-        const promises = renderProps.components.reduce((promises, component) => (
+        const actions = renderProps.components.reduce((promises, component) => (
           promises.concat(component.fetchData ?
             component.fetchData(renderProps.params, location.query) :
             [])
         ), []);
 
-        Promise.all(promises)
-          .then(actions => {
-            actions.map(req.store.dispatch);
+
+        Promise.all(actions.map(req.store.dispatch))
+          .then(() => {
+            console.log('start render', req.store.getState());
             try {
               HTML = renderToString(
                 <Provider store={req.store}>

@@ -58,6 +58,7 @@
     "babel-loader": "*",
     "babel-plugin-react-intl": "*",
     "babel-plugin-syntax-object-rest-spread": "*",
+    "babel-plugin-transform-class-properties": "^6.10.2",
     "babel-plugin-transform-object-assign": "*",
     "babel-polyfill": "*",
     "babel-preset-es2015": "*",
