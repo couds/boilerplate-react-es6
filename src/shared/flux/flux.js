@@ -1,8 +1,17 @@
-import reducers from 'flux/reducers';
-import { createStore as reduxCreateStore, applyMiddleware } from 'redux';
-import { fromJS } from 'immutable';
-import asyncMiddleware from 'flux/middlewares/async';
+import { Map, List } from 'immutable';
+import Home from 'flux/components/home';
 
-export function createStore(initialState) {
-  return reduxCreateStore(reducers, fromJS(initialState), applyMiddleware(asyncMiddleware));
+export const INITIAL_STATE = Map({
+  home: Home.INITIAL_STATE,
+});
+
+export class Actions {
+  get Home() {
+    return new Home.Actions();
+  }
+}
+
+export function reducers(previousState, action) {
+  return previousState
+    .update('home', state => Home.reducers(state, action));
 }

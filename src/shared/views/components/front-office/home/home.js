@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { actionCreator, actionCreator2 } from 'flux/actions/creators';
+import { Actions } from 'flux';
 
 
 if (process.env.BROWSER) {
@@ -8,50 +8,27 @@ if (process.env.BROWSER) {
 }
 
 class Home extends Component {
-  static fetchData(params = {}, query = {}) {
-    return [actionCreator(), actionCreator2()];
-  }
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: 'World',
-    };
+  static getActions(params = {}, query = {}) {
+    const actions = new Actions();
+    return [actions.Home.fetchHomeData()];
   }
   componentDidMount() {
-    Home.fetchData(this.props.params, this.props.location.query);
+    Home.getActions(this.props.params, this.props.location.query).map(this.props.dispatch);
   }
 
-  onOver = (evt) => {
-    console.log('Over', `(${evt.clientX},${evt.clientY})`, evt.detail);
-  }
-
-  onDrag = (evt) => {
-    console.log('Drag');
-  }
-
-  onClick = evt => {
-    this.props.dispatch(actionCreator()).then(t => {
-      console.log('after dispatch', t);
-    });
-  }
 
   render() {
     return (
       <div>
-        <div onClick={this.onClick} onDragOver={this.onOver} style={{ marginLeft: 100, marginTop: 250, width: 400, height: 400, background: 'blue' }} >
-
-        </div>
-        <div draggable="true" style={{ width: 50, height: 50, background: 'red' }} onDragStart={this.onDrag} >
-
-        </div>
-
       </div>
     );
   }
 }
 
 function stateToProps(state) {
-  return {};
+  return {
+    home: state.get('home'),
+  };
 }
 
 export default connect(stateToProps)(Home);

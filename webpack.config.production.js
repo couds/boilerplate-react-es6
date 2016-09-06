@@ -6,6 +6,8 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin");
 module.exports = {
   devtool: 'cheap-module-eval-source-map',
   entry: [
+    'intl',
+    'babel-polyfill',
     './src/client/index.js',
   ],
   output: {
@@ -38,10 +40,7 @@ module.exports = {
         exclude: /node_modules/,
         query: {
           cacheDirectory: true,
-          presets: ['es2015', 'react'],
-          plugins: [
-            'transform-class-properties'
-          ]
+          presets: ['es2015', 'react', 'stage-0'],
         },
       },
       {
@@ -61,8 +60,5 @@ module.exports = {
   resolve: {
     modulesDirectories: ['node_modules', 'src/shared'],
     extensions: ['', '.js', '.jsx'],
-    alias: {
-      repositories: 'requests',
-    },
   },
 };

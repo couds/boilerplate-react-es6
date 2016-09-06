@@ -8,7 +8,8 @@ module.exports = {
   entry: [
     // For hot style updates
     'webpack/hot/dev-server',
-
+    'intl',
+    'babel-polyfill',
     // The script refreshing the browser on none hot updates
     'webpack-dev-server/client?http://localhost:8080',
     './src/client/index.js',
@@ -38,10 +39,7 @@ module.exports = {
         exclude: /node_modules/,
         query: {
           cacheDirectory: true,
-          presets: ['es2015', 'react'],
-          plugins: [
-            'transform-class-properties'
-          ]
+          presets: ['es2015', 'react', 'stage-0'],
         }
       },
       {
@@ -61,8 +59,5 @@ module.exports = {
   resolve: {
     modulesDirectories: ['node_modules', 'src/shared'],
     extensions: ['', '.js', '.jsx'],
-    alias: {
-      repositories: 'requests'
-    }
   }
 };

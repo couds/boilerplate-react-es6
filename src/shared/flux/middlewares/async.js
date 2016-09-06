@@ -6,12 +6,8 @@ export default (store) => next => (action = {
   payload: false,
 }) => {
   if (!action.payload) {
-    return next(action);
+    return Promise.resolve(next(action));
   }
-  const loading = store.getState().loading || (store.getState().get && store.getState().get('loading').toJS());
-
-  // Check if the action is already loading
-  if (loading && loading.actions && loading.actions.find(a => a === action.type)) return Promise.resolve();
 
   let promise = undefined;
   let payload = action.payload;
@@ -51,10 +47,9 @@ export default (store) => next => (action = {
         }
         resolve();
       }).catch(err => {
-        console.log(err.stack);
         reject(err);
       });
     });
   }
-  return next(action);
+  return Promise.resolve(next(action));
 };

@@ -1,16 +1,7 @@
 {
   "presets": [
     "es2015",
-    "react"
-  ],
-  "plugins": [
-    "transform-class-properties",
-    [
-      "react-intl",
-      {
-        "messagesDir": "./_translation",
-        "enforceDescriptions": true
-      }
-    ]
+    "react",
+    "stage-0"
   ]
 }

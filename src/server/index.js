@@ -19,7 +19,7 @@ import routes from 'routes';
 
 //  REDUX
 
-import { createStore } from 'flux';
+import { createStore } from 'flux/store';
 import { Provider } from 'react-redux';
 
 const app = express();

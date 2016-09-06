@@ -1,5 +1,5 @@
 {
   "name": "application-name",
   "version": "0.0.1",
-  "main": "action-types.js"
+  "main": "home-reducers.js"
 }
