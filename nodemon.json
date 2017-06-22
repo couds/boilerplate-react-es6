@@ -6,16 +6,12 @@
   ],
   "verbose": false,
   "execMap": {
-    "js": "node --harmony"
-  },
-  "events": {
-    "restart": "osascript -e 'display notification \"App restarted due to:\n'$FILENAME'\" with title \"nodemon\"'"
+    "js": "node "
   },
   "env": {
     "NODE_ENV": "development",
-    "NODE_PATH": "./lib:./src/shared:./src/server",
-    "PORT" : 3001,
-    "WEBPACK_DEV": true
+    "NODE_PATH": "./src/shared:./src/server",
+    "PORT" : 3005
   },
   "ext": "js jsx"
 }

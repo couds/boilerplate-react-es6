@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 import { createStore } from 'flux';
 import { Provider } from 'react-redux';
 
-import { Router, browserHistory, match } from 'react-router';
+import { Router, browserHistory as history, match } from 'react-router';
 import routes from 'routes';
 
 // Polyfill Intl for Safari Browser (maybe check and import only on safari?)
@@ -16,12 +16,12 @@ function run() {
   element.remove();
   const store = createStore(initialState);
   window.test = () => store.getState();
-  match(({ routes, location }), () => {
+  match(({ routes, history }), (error, redirectLocation, renderProps) => {
     render(
       <Provider store={store} >
-        <Router children={routes} history={browserHistory} />
+        <Router {...renderProps} />
       </Provider>,
-      document.getElementById('react-app')
+      document.getElementById('react-app'),
     );
   });
 }

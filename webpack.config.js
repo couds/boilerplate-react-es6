@@ -6,27 +6,21 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin");
 module.exports = {
   devtool: 'cheap-module-eval-source-map',
   entry: [
-    // For hot style updates
-    'webpack/hot/dev-server',
-
-    // The script refreshing the browser on none hot updates
-    'webpack-dev-server/client?http://localhost:8080',
     './src/client/index.js',
   ],
   output: {
-    path: path.join(__dirname, 'public'),
+    path: path.join(__dirname, 'dist/public'),
     publicPath: '/static/',
     filename: 'javascripts/bundle.js',
     chunkFilename: 'javascripts/[id].bundle.js',
   },
   plugins: [
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.NoErrorsPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
     new webpack.DefinePlugin({
       'process.env.BROWSER': true,
     }),
-    new webpack.HotModuleReplacementPlugin(),
-    new ExtractTextPlugin('stylesheets/style.css', {
+    new ExtractTextPlugin({
+      filename: 'stylesheets/style.css',
       allChunks: true
     })
   ],
@@ -34,35 +28,36 @@ module.exports = {
     loaders: [
       {
         test: /\.jsx?$/,
-        loader: 'babel',
+        loader: 'babel-loader',
         exclude: /node_modules/,
         query: {
           cacheDirectory: true,
           presets: ['es2015', 'react'],
           plugins: [
-            'transform-class-properties'
+            'transform-class-properties',
+            'transform-object-rest-spread'
           ]
         }
       },
       {
         test: /\.css$/, // Only .css files
-        loader: 'style!css' // Run both loaders
+        loader: 'style-loader!css-loader' // Run both loaders
       },
       {
         test: /\.json/, // Only .json files
-        loader: 'json' // Run both loaders
+        loader: 'json-loader' // Run both loaders
       },
       {
         test: /\.scss$/,
-        loader: ExtractTextPlugin.extract("style-loader", "css-loader!sass-loader")
+        loader: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: "css-loader!sass-loader"
+        })
       }
     ]
   },
   resolve: {
-    modulesDirectories: ['node_modules', 'src/shared'],
-    extensions: ['', '.js', '.jsx'],
-    alias: {
-      repositories: 'requests'
-    }
+    modules: ['node_modules', 'src/shared'],
+    extensions: ['.js', '.jsx']
   }
 };

@@ -29,7 +29,7 @@ app.set('views', path.join('views'));
 app.set('view engine', 'react');
 
 // uncomment after placing your favicon in /public
-// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+// app.use(favicon(path.join(__dirname, 'dist/public', 'favicon.ico')));
 app.use(morgan('dev'));
 app.use(compress());
 app.use(bodyParser.json());
@@ -52,23 +52,10 @@ function normalizePort(val) {
   return false;
 }
 
-const port = normalizePort(process.env.PORT || '3001');
+const port = normalizePort(process.env.PORT || '3004');
 
 
-/** @namespace process.env.WEBPACK_DEV */
-if (process.env.NODE_ENV !== 'production' || process.env.WEBPACK_DEV) {
-  const httpProxy = require('http-proxy');
-  const proxy = httpProxy.createProxyServer();
-  app.use('/static', (req, res) => {
-    proxy.web(req, res, {
-      target: 'http://localhost:8080/static',
-    });
-  });
-} else {
-  app.use('/static', express.static(path.resolve(
-    path.join(__dirname, '..', 'public/')
-  )));
-}
+app.use('/static', express.static(path.join(__dirname, '../..', 'dist/public/')));
 
 app.use(helmet.noCache({ noEtag: true }));
 app.use(helmet());
@@ -100,7 +87,7 @@ app.use((req, res, next) => {
               HTML = renderToString(
                 <Provider store={req.store}>
                   <RouterContext {...renderProps} />
-                </Provider>
+                </Provider>,
               );
               HTML = renderToStaticMarkup(<Layout store={req.store}>{HTML}</Layout>);
             } catch (err) {
@@ -129,6 +116,7 @@ if (app.get('env') === 'development') {
     res.status(err.status || 500);
     console.log(err.message, err.stack);
     res.json(err);
+    next();
   });
 }
 
@@ -151,7 +139,6 @@ app.use('*', (req, res) => {
 
 // Start Web Server
 
-const debug = require('debug')('React-Sandbox:server');
 const http = require('http');
 
 /**

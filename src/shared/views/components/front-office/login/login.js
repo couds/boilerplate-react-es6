@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { Link } from 'react-router';
+import pagePropTypes from 'utils/prop-types/page';
 
 if (process.env.BROWSER) {
   require('./login.scss');
@@ -10,7 +11,11 @@ if (process.env.BROWSER) {
 
 class Home extends Component {
   static fetchData(params = {}, query = {}) {
-    return [Promise.resolve({ type: 'TEST' })];
+    return [Promise.resolve({ type: 'TEST', payload: { params, query } })];
+  }
+
+  static propTypes = {
+    ...pagePropTypes,
   }
 
   constructor(props) {
@@ -26,7 +31,7 @@ class Home extends Component {
 
   render() {
     return (
-      <div className="test2" onClick={() => this.setState({ name: 'John' })}>
+      <div role="button" tabIndex="-1" className="test2" onClick={() => this.setState({ name: 'John' })}>
         <h1>Login</h1>
         <Link to="/">Home</Link>
       </div>
@@ -35,7 +40,7 @@ class Home extends Component {
 }
 
 function stateToProps(state) {
-  return {};
+  return { ...state };
 }
 
 export default connect(stateToProps)(Home);

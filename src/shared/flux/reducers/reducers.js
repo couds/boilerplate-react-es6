@@ -22,18 +22,16 @@ export default function (state = INITIAL_STATE, action = {}) {
     case LOADING:
       return state.update('loading', loading =>
         loading
-          .update('actions', actions => {
+          .update('actions', (actions) => {
             if (action.payload) {
               return actions.push(action.action);
             }
             return actions.filter(a => a !== action.action);
           })
-          .update(loading => {
-            return Map({
-              isLoading: loading.get('actions').size > 0,
-              actions: loading.get('actions'),
-            });
-          })
+          .update(isLoading => Map({
+            isLoading: isLoading.get('actions').size > 0,
+            actions: isLoading.get('actions'),
+          })),
       );
     case ACTION_TYPES.INITIAL:
       return state.set('test', fromJS(action.payload));

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { actionCreator, actionCreator2 } from 'flux/actions/creators';
+import pagePropTypes from 'utils/prop-types/page';
 
 
 if (process.env.BROWSER) {
@@ -9,8 +10,13 @@ if (process.env.BROWSER) {
 
 class Home extends Component {
   static fetchData(params = {}, query = {}) {
-    return [actionCreator(), actionCreator2()];
+    return [actionCreator(query), actionCreator2()];
   }
+
+  static propTypes = {
+    ...pagePropTypes,
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -25,12 +31,12 @@ class Home extends Component {
     console.log('Over', `(${evt.clientX},${evt.clientY})`, evt.detail);
   }
 
-  onDrag = (evt) => {
+  onDrag = () => {
     console.log('Drag');
   }
 
-  onClick = evt => {
-    this.props.dispatch(actionCreator()).then(t => {
+  onClick = () => {
+    this.props.dispatch(actionCreator()).then((t) => {
       console.log('after dispatch', t);
     });
   }
@@ -38,19 +44,21 @@ class Home extends Component {
   render() {
     return (
       <div>
-        <div onClick={this.onClick} onDragOver={this.onOver} style={{ marginLeft: 100, marginTop: 250, width: 400, height: 400, background: 'blue' }} >
-
-        </div>
-        <div draggable="true" style={{ width: 50, height: 50, background: 'red' }} onDragStart={this.onDrag} >
-
-        </div>
+        <div
+          role="button"
+          tabIndex="-1"
+          onClick={this.onClick}
+          onDragOver={this.onOver}
+          style={{ marginLeft: 100, marginTop: 250, width: 400, height: 400, background: 'blue' }}
+        />
+        <div draggable="true" style={{ width: 50, height: 50, background: 'red' }} onDragStart={this.onDrag} />
 
       </div>
     );
   }
 }
 
-function stateToProps(state) {
+function stateToProps() {
   return {};
 }
 

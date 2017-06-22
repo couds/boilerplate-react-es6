@@ -1,6 +1,6 @@
 export const LOADING = '@async/Loading';
 
-export default (store) => next => (action = {
+export default store => next => (action = {
   type: '',
   ignoreLoading: false,
   payload: false,
@@ -11,14 +11,18 @@ export default (store) => next => (action = {
   const loading = store.getState().loading || (store.getState().get && store.getState().get('loading').toJS());
 
   // Check if the action is already loading
-  if (loading && loading.actions && loading.actions.find(a => a === action.type)) return Promise.resolve();
+  if (loading &&
+      loading.actions &&
+      loading.actions.find(a => a === action.type)) {
+    return Promise.resolve();
+  }
 
-  let promise = undefined;
+  let promise;
   let payload = action.payload;
   if (typeof action.payload === 'function') {
     payload = action.payload();
   }
-  if ((payload.then && typeof(payload.then) === 'function')) {
+  if ((payload.then && typeof (payload.then) === 'function')) {
     promise = payload;
   }
   if (promise) {
@@ -36,7 +40,7 @@ export default (store) => next => (action = {
       });
     }, 100);
     return new Promise((resolve, reject) => {
-      payload.then(data => {
+      payload.then((data) => {
         finished = true;
         next(Object.assign({}, action, { payload: data }));
         if (showLoader) {
@@ -50,7 +54,7 @@ export default (store) => next => (action = {
           }, time < 500 ? 500 - time : 0);
         }
         resolve();
-      }).catch(err => {
+      }).catch((err) => {
         console.log(err.stack);
         reject(err);
       });

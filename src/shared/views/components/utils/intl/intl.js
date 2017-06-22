@@ -2,19 +2,27 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { IntlProvider, addLocaleData } from 'react-intl';
+
+import en from 'react-intl/locale-data/en';
+import es from 'react-intl/locale-data/es';
+
+import PropTypes from 'prop-types';
+
 import Wrapper from './wrapper';
 
-import en from 'react-intl/lib/locale-data/en';
-import es from 'react-intl/lib/locale-data/es';
-import fr from 'react-intl/lib/locale-data/fr';
-
-
 class Intl extends Component {
+  static propTypes = {
+    locale: PropTypes.shape({
+      language: PropTypes.string.isRequired,
+      messages: PropTypes.object.isRequired,
+    }).isRequired,
+    children: PropTypes.node.isRequired,
+  }
+
   constructor(props) {
     super(props);
     addLocaleData(en);
     addLocaleData(es);
-    addLocaleData(fr);
   }
 
   render() {
@@ -26,10 +34,13 @@ class Intl extends Component {
     };
 
     return (
-      <IntlProvider defaultLocale="en" locale={this.props.locale.language}
+      <IntlProvider
+        defaultLocale="en"
+        locale={this.props.locale.language}
         messages={this.props.locale.messages}
         formats={formats}
-        defaultFormats={formats} >
+        defaultFormats={formats}
+      >
         <Wrapper>
           {this.props.children}
         </Wrapper>

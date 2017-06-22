@@ -1,8 +1,13 @@
-import React, { Component } from 'react';
-import { injectIntl } from 'react-intl';
+import React from 'react';
+import { injectIntl, InjectedIntlProps } from 'react-intl';
+import PropTypes from 'prop-types';
 
 
-class InternationalizationWrapper extends Component {
+class InternationalizationWrapper extends React.Component {
+  static propTypes = {
+    ...InjectedIntlProps,
+  }
+
   getChildContext() {
     return {
       intl: this.props.intl,
@@ -14,7 +19,7 @@ class InternationalizationWrapper extends Component {
 }
 
 InternationalizationWrapper.childContextTypes = {
-  intl: React.PropTypes.object,
+  intl: PropTypes.object,
 };
 
 export default injectIntl(InternationalizationWrapper);
