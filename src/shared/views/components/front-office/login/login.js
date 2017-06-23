@@ -11,7 +11,7 @@ if (process.env.BROWSER) {
 
 class Home extends Component {
   static fetchData(params = {}, query = {}) {
-    return [Promise.resolve({ type: 'TEST', payload: { params, query } })];
+    return [{ type: 'TEST', payload: { params, query } }];
   }
 
   static propTypes = {

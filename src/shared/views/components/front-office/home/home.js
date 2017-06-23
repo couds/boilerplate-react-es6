@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { actionCreator, actionCreator2 } from 'flux/actions/creators';
 import pagePropTypes from 'utils/prop-types/page';
-
+import { Link } from 'react-router';
 
 if (process.env.BROWSER) {
   require('./home.scss');
@@ -27,29 +27,12 @@ class Home extends Component {
     Home.fetchData(this.props.params, this.props.location.query);
   }
 
-  onOver = (evt) => {
-    console.log('Over', `(${evt.clientX},${evt.clientY})`, evt.detail);
-  }
-
-  onDrag = () => {
-    console.log('Drag');
-  }
-
-  onClick = () => {
-    this.props.dispatch(actionCreator()).then((t) => {
-      console.log('after dispatch', t);
-    });
-  }
-
   render() {
     return (
       <div>
+        <Link to="/login">Login</Link>
         <div
-          role="button"
-          tabIndex="-1"
-          onClick={this.onClick}
-          onDragOver={this.onOver}
-          style={{ marginLeft: 100, marginTop: 250, width: 400, height: 400, background: 'blue' }}
+          style={{ marginLeft: 10, marginTop: 250, width: 400, height: 400, background: 'blue' }}
         />
         <div draggable="true" style={{ width: 50, height: 50, background: 'red' }} onDragStart={this.onDrag} />
 

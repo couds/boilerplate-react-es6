@@ -54,8 +54,13 @@ function normalizePort(val) {
 
 const port = normalizePort(process.env.PORT || '3004');
 
+app.get('*.js', (req, res, next) => {
+  req.url += '.gz';
+  res.set('Content-Encoding', 'gzip');
+  next();
+});
 
-app.use('/static', express.static(path.join(__dirname, '../..', 'dist/public/')));
+app.use('/public', express.static(path.join(__dirname, '../..', 'dist/public/')));
 
 app.use(helmet.noCache({ noEtag: true }));
 app.use(helmet());

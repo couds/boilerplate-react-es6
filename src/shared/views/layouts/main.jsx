@@ -6,12 +6,14 @@ class MainLayout extends Component {
     return (
       <html lang="en">
         <head>
-          <script id="initial-state"
+          <script
+            id="initial-state"
             type="text/json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(this.props.data) }} />
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(this.props.data) }}
+          />
           <title>Test</title>
-          <script async src="/static/javascripts/bundle.js" />
-          <link rel="stylesheet" href="/static/stylesheets/style.css" />
+          <script async src="/public/javascripts/bundle.js" />
+          <link rel="stylesheet" href="/public/stylesheets/style.css" />
         </head>
         <body>
           {
